@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+            <main class="col-md-8">
+                {% for post in page_of_blogs.object_list %}
+                <article class="post post-{{ post.pk }}">
+                    <header class="entry-header">
+                        <h1 class="entry-title">
+                            <a href="{% url 'detail' post.id %}">{{ post.title }}</a>
+                        </h1>
+                        <div class="entry-meta">
+                            <span class="post-category"><a href="{% url 'category' post.category.pk %}">{{ post.category }}</a></span>
+                            <span class="post-date"><a href="#"><time class="entry-date"
+                                                                      datetime="2012-11-09T23:15:57+00:00">{{ post.created_time|date:"Y-m-d" }}</time></a></span>
+                            <span class="post-author"><a href="#">发布 : {{ post.author }}</a></span>
+                        </div>
+                    </header>
+                    <div class="entry-content clearfix">
+                        <p>{{ post.excerpt }}</p>
+                    </div>
+                </article>
+                {% empty %}
+                    <div class="no-post">暂时还没有发布的文章！</div>
+                {% endfor %}
+                    <!-- 简单分页效果
+                    <div class="pagination-simple">
+                        <a href="#">上一页</a>
+                        <span class="current">第 6 页 / 共 11 页</span>
+                        <a href="#">下一页</a>
+                    </div>
+                    -->
+                   <div class="paginator">
+                        <div class="pagination">
+                            <ul>
+                                {% for page in page_list %}
+                                    {% if page == page_of_blogs.number %}
+                                        <li class="current">{{ page }}</li>
+                                    {% else %}
+                                        {% if page == '...' %}
+                                            <li>{{ page }}</li>
+                                        {% else %}
+                                            <li><a href="?page={{ page }}">{{ page }}</a></li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <p>当前第{{ page_of_blogs.number}}页 - 共{{ page_of_blogs.paginator.num_pages }}页</p>
+                    </div>
+            </main>
+{% endblock %}
